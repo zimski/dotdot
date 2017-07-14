@@ -20,6 +20,7 @@ values."
    '(
      yaml
      ansible
+     ruby-on-rails
      restclient
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
