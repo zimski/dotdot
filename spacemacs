@@ -32,7 +32,6 @@ This function should only modify configuration layer settings."
    '(
      yaml
      ansible
-     ruby-on-rails
      restclient
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -40,7 +39,9 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-tab-key-behavior 'complete
+                      auto-completion-return-key-behavior nil)
      better-defaults
      emacs-lisp
      (org :variables
@@ -64,8 +65,10 @@ This function should only modify configuration layer settings."
      java
      groovy
      ruby
+     ruby-on-rails
      shell-scripts
      clojure
+     html
      react
      php
      prodigy
@@ -152,8 +155,8 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
 
-   dotspacemacs-themes '(monokai
-                         spacemacs-dark
+   dotspacemacs-themes '(spacemacs-dark
+                         monokai
                          deeper-blue
                          sanityinc-tomorrow-eighties
                          material
@@ -306,16 +309,15 @@ It should only modify the values of Spacemacs settings."
    ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
    ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
    ;; This variable can also be set to a property list for finer control:
-   ;; '(:relative nil
-   ;;   :disabled-for-modes dired-mode
-   ;;                       doc-view-mode
-   ;;                       markdown-mode
-   ;;                       org-mode
-   ;;                       pdf-view-mode
-   ;;                       text-mode
-   ;;   :size-limit-kb 1000)
+   dotspacemacs-line-numbers '(:relative t
+                                         :disabled-for-modes dired-mode
+                                         doc-view-mode
+                                         markdown-mode
+                                         org-mode
+                                         pdf-view-mode
+                                         text-mode
+                                         :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers nil
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -404,6 +406,7 @@ you should place you code here."
                               flycheck-javascript-eslint-executable
                               (flycheck-locate-config-file-ancestor-directories
                                "node_modules/.bin/eslint" nil))))
+
 
   (add-to-list 'tramp-default-proxies-alist '(".*.fstrz.net" "\\`root\\'" "/ssh:%h:"))
   ;; Manage my emails
