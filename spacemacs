@@ -407,6 +407,8 @@ you should place you code here."
                               (flycheck-locate-config-file-ancestor-directories
                                "node_modules/.bin/eslint" nil))))
 
+  (setq org-todo-keywords
+        '((sequence "TODO" "WIP" "|" "DONE" "WAITING")))
 
   (add-to-list 'tramp-default-proxies-alist '(".*.fstrz.net" "\\`root\\'" "/ssh:%h:"))
   ;; Manage my emails
