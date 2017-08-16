@@ -473,7 +473,7 @@ you should place you code here."
   (prodigy-define-service
    :name "FastAPI"
    :cwd "~/Fasterize/fastapi"
-   :command "/home/zimski/.nvm-fish/v0.8.261/bin/node"
+   :command "/home/zimski/.nvm/v6.10.0/bin/node"
    :args '("app.js")
    :tags '(work fasterize fe engine)
    :port 8101)
