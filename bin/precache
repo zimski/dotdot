@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec nice -n 20 ionice -c 3 find "${1:-.}" -xdev -type f \
+  -exec nice -n 20 ionice -c 3 cat '{}' \; > /dev/null
