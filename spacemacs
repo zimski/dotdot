@@ -29,55 +29,45 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(sql
-     yaml
-     ansible
-     restclient
+   '(html
+     csv
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     ;; ivy
      helm
      (auto-completion :variables
                       auto-completion-tab-key-behavior 'complete
+                      auto-completion-enable-snippets-in-popup t
                       auto-completion-return-key-behavior nil)
      better-defaults
      emacs-lisp
-     (org :variables
-          org-enable-github-support t)
+     react
      git
-     nginx
-     spotify
+     yaml
+     emoji
      markdown
-     w3m
-     go
-     spotify-helm
-     (mu4e :variables
-           mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e")
-     ;; org
+     org
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
-     (spell-checking :variables spell-checking-enable-auto-dictionary t)
+     spell-checking
      syntax-checking
-     javascript
-     java
-     groovy
-     ruby
+     version-control
+     (ruby :variables
+           ruby-test-runner 'minitest)
      ruby-on-rails
-     shell-scripts
      clojure
-     html
-     react
-     php
-     prodigy
-     gtags
-     (ranger :variables
-             ranger-preview-file t)
-     (version-control :variables
-                      version-control-diff-tool 'diff-hl
-                      verstion-control-global-margin t)
+     elixir
+     javascript
+     elm
+     web
+     (wakatime :variables
+               wakatime-api-key  "bb138f37-cc77-4844-a856-48e571fe29ff"
+               ;; use the actual wakatime path
+               wakatime-cli-path "/usr/local/bin/wakatime")
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -113,6 +103,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-elpa-https t
    ;; Maximum allowed time in seconds to contact an ELPA repository.
+   ;; (default 5)
    dotspacemacs-elpa-timeout 5
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -121,7 +112,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-check-for-update nil
    ;; If non-nil, a form that evaluates to a package directory. For example, to
    ;; use different package directories for different Emacs versions, set this
-   ;; to `emacs-version'.
+   ;; to `emacs-version'. (default nil)
    dotspacemacs-elpa-subdirectory nil
    ;; One of `vim', `emacs' or `hybrid'.
    ;; `hybrid' is like `vim' except that `insert state' is replaced by the
@@ -147,47 +138,26 @@ It should only modify the values of Spacemacs settings."
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
-   ;; True if the home buffer should respond to resize events.
+   ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-
    dotspacemacs-themes '(spacemacs-dark
-                         monokai
-                         deeper-blue
-                         sanityinc-tomorrow-eighties
-                         material
-                         lush
-                         dorsey
-                         ample
-                         zenburn
-                         ample
-                         solarized-dark
-                         solarized-light
-                         sanityinc-tomorrow-eighties
-                         noctilux
-                         niflheim
-                         minimal
-                         tangotango
-                         spacemacs-light
-                         solarized-light
-                         solarized-dark
-                         leuven
-                         monokai
-                         zenburn)
-   ;; If non nil the cursor color matches the state color in GUI Emacs.
+                         spacemacs-light)
+   ;; If non-nil the cursor color matches the state color in GUI Emacs.
+   ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 11
+                               :size 13
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
-   ;; The leader key
+   ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
    ;; (default "SPC")
@@ -230,7 +200,7 @@ It should only modify the values of Spacemacs settings."
    ;; start. (default nil)
    dotspacemacs-auto-resume-layouts nil
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
-   ;; effect when using the "jump to layout by number" commands.
+   ;; effect when using the "jump to layout by number" commands. (default nil)
    dotspacemacs-auto-generate-layout-names nil
    ;; Size (in MB) above which spacemacs will prompt to open the large file
    ;; literally to avoid performance issues. Opening a file literally means that
@@ -256,8 +226,9 @@ It should only modify the values of Spacemacs settings."
    ;; source settings. Else, disable fuzzy matching in all sources.
    ;; (default 'always)
    dotspacemacs-helm-use-fuzzy 'always
-   ;; If non-nil the paste micro-state is enabled. When enabled pressing `p'
-   ;; several times cycle between the kill ring content. (default nil)
+   ;; If non-nil, the paste transient-state is enabled. While enabled, pressing
+   ;; `p' several times cycles through the elements in the `kill-ring'.
+   ;; (default nil)
    dotspacemacs-enable-paste-transient-state nil
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
@@ -318,6 +289,7 @@ It should only modify the values of Spacemacs settings."
                                          text-mode
                                          :size-limit-kb 1000)
    ;; (default nil)
+   ;; nil
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -359,6 +331,7 @@ It should only modify the values of Spacemacs settings."
    ;; %n - Narrow if appropriate
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
+   ;; (default "%I@%S")
    dotspacemacs-frame-title-format "%I@%S"
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
@@ -368,16 +341,30 @@ It should only modify the values of Spacemacs settings."
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-
-   js-indent-level 2
-   js2-basic-offset 2
-   explicit-shell-file-name "/bin/bash"
-   shell-file-name "/bin/bash"
    dotspacemacs-whitespace-cleanup nil
-   flycheck-disabled-checkers '(javascript-jshint)
-   ;; ranger
-   exec-path `("/home/zimski/.nvm-fish/v0.12.7/bin" "/home/zimski/.rbenv/shims" "/home/zimski/.local/bin/" "/home/zimski/.rbenv/bin" "/usr/local/sbin" "/usr/local/bin" "/usr/sbin" "/usr/bin" "/sbin" "/bin" "/usr/games" "/usr/local/games" "/opt/packer" "/home/zimski/emacs-src/emacs-24.5/lib-src" "/usr/local/libexec/emacs/24.5/x86_64-unknown-linux-gnu")
-   anger-show-literal nil
+   ;; Either nil or a number of seconds. If non-nil zone out after the specified
+   ;; number of seconds. (default nil)
+   dotspacemacs-zone-out-when-idle nil
+   ;; Run `spacemacs/prettify-org-buffer' when
+   ;; visiting README.org files of Spacemacs.
+   ;; (default nil)
+   dotspacemacs-pretty-docs nil
+
+   ;; javascript indentation
+    standard-indent 2
+    tab-width 2
+    indent-tabs-mode nil
+    js-indent-level 2
+    js2-basic-offset 2
+    js2-strict-semi-warning nil
+    js2-missing-semi-one-line-override nil
+    web-mode-markup-indent-offset 2
+    web-mode-css-indent-offset 2
+    web-mode-code-indent-offset 2
+    web-mode-indent-style 2
+    ;; ivy search
+    ivy-re-builders-alist '((ivy-switch-buffer . ivy--regex-plus)
+                            (t . ivy--regex-fuzzy))
    ))
 
 (defun dotspacemacs/user-init ()
@@ -386,125 +373,15 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  (add-to-list 'exec-path "/Users/chaddachakib/.nvm/versions/node/v8.6.0/bin")
   )
 
 (defun dotspacemacs/user-config ()
-  "Configuration function for user code.
-This function is called at the very end of Spacemacs initialization after
-layers configuration.
-This is the place where most of your configurations should be done. Unless it is
-explicitly specified that a variable should be set before a package is loaded,
-you should place you code here."
-  (global-flycheck-mode)
-  (fset 'evil-visual-update-x-selection 'ignore)
-  (flycheck-add-mode 'javascript-eslint 'js2-mode)
-  (flycheck-add-mode 'javascript-eslint 'js-mode)
-  (setq-default ispell-extra-args  '("--sug-mode=ultra"))
-  (global-company-mode)
-  (add-hook 'js2-mode-hook (lambda ()
-                             (setq-local
-                              flycheck-javascript-eslint-executable
-                              (flycheck-locate-config-file-ancestor-directories
-                               "node_modules/.bin/eslint" nil))))
-
-  (setq org-todo-keywords
-        '((sequence "TODO" "WIP" "|" "DONE" "WAITING")))
-
-  (add-to-list 'tramp-default-proxies-alist '(".*.fstrz.net" "\\`root\\'" "/ssh:%h:"))
-  ;; Manage my emails
-  (setq mu4e-maildir "~/Maildir"
-        mu4e-sent-folder "/[Gmail].Sent Mail"
-        mu4e-drafts-folder "/[Gmail].Drafts"
-        mu4e-trash-folder "/[Gmail].Trash"
-        mu4e-refile-folder "/[Gmail].Archive"
-        mu4e-get-mail-command "offlineimap"
-        user-mail-address "c@fasterize.com"
-        user-full-name "Chadda Chakib"
-        smtpmail-local-domain "fasterize.com"
-        mu4e-update-interval nil
-        mu4e-compose-signature-auto-include nil
-        mu4e-view-show-images t
-        mu4e-view-show-addresses t)
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-stream-type 'starttls
-        smtpmail-user-mail-address "c@fasterize.com"
-        smtpmail-default-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-service 587)
-
-  (setq mu4e-html2text-command "html2text --protect-links --no-wrap-links")
-  (setq mu4e-bookmarks
-    '( ("flag:unread AND NOT flag:trashed AND maildir:/inbox" "Unread messages"      ?u)
-       ("date:today..now"                  "Today's messages"     ?t)
-       ("date:7d..now"                     "Last 7 days"          ?w)
-       ("mime:image/*"                     "Messages with images" ?p)))
-  (setq org-agenda-files (list "~/org/work.org"
-                               "~/org/personal_work.org"
-                               "~/org/home.org"))
-
-  (setq helm-buffer-max-length nil)
-
-  (prodigy-define-service
-   :name "Testerize"
-   :cwd "~/Fasterize/testerize"
-   :command "/home/zimski/.nvm-fish/v0.12.7/bin/supervisor"
-   :args '("app.js")
-   :tags '(work fasterize fe engine)
-   :port 3001)
-  (prodigy-define-service
-    :name "reverse proxy container"
-    :cwd "~/Fasterize/"
-    :command "~/Fasterize/fstrz/bin/fstrz"
-    :args '("container" "reverse-devfe")
-    :tags '(work fasterize fe engine))
-  (prodigy-define-service
-    :name "UP cache01-devfe"
-    :cwd "~/Fasterize/"
-    :command "~/Fasterize/fstrz/bin/fstrz"
-    :args '("host" "up" "cache01-devfe")
-    :tags '(work fasterize fe engine))
-  (prodigy-define-service
-   :name "Geonosis"
-   :cwd "~/Fasterize/geonosis"
-   :command "~/Fasterize/geonosis/sbt"
-   :args '("run" "-Dconfig.file=../FasterizeEngine/geonosis.conf")
-   :tags '(work fasterize fe engine)
-   :port 9000)
-  (prodigy-define-service
-   :name "FastAPI"
-   :cwd "~/Fasterize/fastapi"
-   :command "/home/zimski/.nvm/v6.10.0/bin/node"
-   :args '("app.js")
-   :tags '(work fasterize fe engine)
-   :port 8101)
-  (prodigy-define-service
-   :name "Engine"
-   :cwd "~/Fasterize/FasterizeEngine"
-   :command "/home/zimski/.nvm-fish/v0.12.7/bin/supervisor"
-   :args '("--" "devfe")
-   :tags '(work fasterize fe engine)
-   :port 8080)
-  (prodigy-define-service
-   :name "Engine80"
-   :cwd "~/Fasterize/FasterizeEngine"
-   :command "/bin/bash"
-   :args '("-c" "/home/zimski/.nvm-fish/v0.12.7/bin/supervisor -- devfe --origin_port 80 --secure_origin_port 443")
-   :tags '(work fasterize fe-test engine-test)
-   :port 8080)
-  (prodigy-define-service
-   :name "Fasterize Dashboard"
-   :cwd "~/Fasterize/fasterize.com"
-   :command "/home/zimski/.rbenv/shims/bundle"
-   :args '("exec" "rails" "s")
-   :tags '(work fasterize fe)
-   :port 3000)
-  (prodigy-define-service
-    :name "Fasterize rails workers"
-    :cwd "~/Fasterize/fasterize.com"
-    :command "/home/zimski/.rbenv/shims/bundle"
-    :args '("exec" "rake" "jobs:work")
-    :tags '(work fasterize fe jobs)
-   )
+  "Configuration for user code:
+This function is called at the very end of Spacemacs startup, after layer
+configuration.
+Put your configuration code here, except for variables that should be set
+before packages are loaded."
   (defun cleanup-buffer-safe ()
     "Perform a bunch of safe operations on the whitespace content of a buffer.
 Does not indent buffer, because it is used for a before-save-hook, and that
@@ -513,6 +390,7 @@ might be bad."
     (untabify (point-min) (point-max))
     (delete-trailing-whitespace)
     (set-buffer-file-coding-system 'utf-8))
+
   (defadvice magit-status (around magit-fullscreen activate)
     (window-configuration-to-register :magit-fullscreen)
     ad-do-it
@@ -526,28 +404,37 @@ might be bad."
 
   (global-set-key (kbd "C-c n") 'cleanup-buffer-safe)
   (add-hook 'before-save-hook 'cleanup-buffer-safe)
+
+
+  ;; mamange to run rails test at a point.
+  ;; first attempt will be to get the file name and line number and run in a terminal bundle exec rails test filename:line_number
+  (defun rails-test-run-command (filename line)
+    (compile (format "bundle exec rails test %s:%i" filename line)))
+
+  (defun run-rails-test-file ()
+    (interactive)
+    (let ((filename (ruby-test-find-file)))
+      (compile (format "bundle exec rails test %s" filename))))
+
+  (defun run-rails-test-at-point ()
+    (interactive)
+    (let* ((filename (ruby-test-find-file))
+           (buffername (get-file-buffer filename)))
+      (with-current-buffer buffername
+        (let ((line (line-number-at-pos (point))))
+          (rails-test-run-command filename line)))
+      )
+    )
+
+  (spacemacs/set-leader-keys "tt" 'run-rails-test-at-point)
+  (spacemacs/set-leader-keys "tT" 'run-rails-test-file)
+
+  (spacemacs/set-leader-keys "mtt" 'run-rails-test-at-point)
+  (spacemacs/set-leader-keys "mtT" 'run-rails-test-file)
   )
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(fci-rule-color "#101010" t)
- '(magit-pull-arguments nil)
- '(nrepl-message-colors
-   (quote
-    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(send-mail-function (quote mailclient-send-it))
- '(shell-file-name "/bin/bash"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
@@ -558,21 +445,14 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(fci-rule-color "#101010" t)
- '(magit-pull-arguments nil)
- '(nrepl-message-colors
-   (quote
-    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (sql-indent nginx-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode zenburn-theme yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org tangotango-theme tagedit sublime-themes spotify spaceline solarized-theme smeargle slim-mode shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restclient-helm restart-emacs rbenv ranger rake rainbow-delimiters pug-mode prodigy popwin persp-mode paradox ox-gfm orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file ob-restclient ob-http noctilux-theme niflheim-theme neotree mwim multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme mmm-mode minitest minimal-theme material-theme markdown-toc magit-gitflow macrostep lush-theme lorem-ipsum livid-mode linum-relative link-hint less-css-mode json-mode js2-refactor js-doc jinja2-mode insert-shebang info+ indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-spotify helm-purpose helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md ggtags fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump diff-hl define-word company-web company-tern company-statistics company-shell company-restclient company-go company-emacs-eclim company-ansible column-enforce-mode color-theme-sanityinc-tomorrow coffee-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu chruby bundler auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile ansible-doc ansible ample-theme aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
- '(send-mail-function (quote mailclient-send-it))
- '(shell-file-name "/bin/bash"))
+    (seeing-is-believing prettier-js helm-org-rifle helm-git-grep evil-ediff elm-test-runner doom-modeline eldoc-eval shrink-path ac-ispell yasnippet-snippets yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify wakatime-mode volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sayid sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe rjsx-mode restart-emacs rbenv rainbow-delimiters pug-mode projectile-rails popwin persp-mode password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-elixir neotree nameless mwim multi-term move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-mix flycheck-elm flycheck-credo flx-ido fill-column-indicator feature-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elm-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish diff-hl define-word csv-mode counsel-projectile company-web company-tern company-statistics column-enforce-mode clojure-snippets clojure-cheatsheet clj-refactor clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode bundler browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-complete auto-compile alchemist aggressive-indent ace-window ace-link ace-jump-helm-line)))
+ '(send-mail-function (quote mailclient-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+ )
 )
